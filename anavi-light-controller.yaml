@@ -1,0 +1,58 @@
+esphome:
+  name: anavi_light_controller
+  platform: ESP8266
+  board: esp_01
+
+wifi:
+  ssid: !secret ap_name
+  password: !secret ap_password
+  fast_connect: true
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Anavi Light COntroller Fallback Hotspot"
+    password: !secret hotspot_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret api_password
+
+ota:
+  password: !secret ota_password
+
+sensor:
+  - platform: uptime
+    name: anavi_light_controller_uptime
+
+light:
+  - platform: rgb
+    name: anavi_light_controller_rgb
+    red: output_component_red
+    green: output_component_green
+    blue: output_component_blue
+
+binary_sensor:
+  - platform: gpio
+    pin: 0
+    name: anavi_light_controller_button
+
+status_led:
+  pin:
+    number: 16
+    inverted: True
+
+output:
+  - platform: esp8266_pwm
+    id: output_component_red
+    pin: 12
+  - platform: esp8266_pwm
+    id: output_component_green
+    pin: 13
+  - platform: esp8266_pwm
+    id: output_component_blue
+    pin: 14
